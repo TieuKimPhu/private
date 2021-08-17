@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 //----------------button-------------------
 export const Button = styled.button`
-    apperance:none;
+    appearance: none;
     background-color: ${props => props.theme.bgColor};
     color: ${props => props.theme.color};
     border: ${props => props.theme.borderButton};
