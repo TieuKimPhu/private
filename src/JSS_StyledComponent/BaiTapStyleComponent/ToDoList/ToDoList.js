@@ -10,14 +10,15 @@ import { TextField, Label, Input } from "../../ComponentsToDoList/TextField";
 import { Button } from "../../ComponentsToDoList/Button";
 import { Table, Tr, Td, Th, Thead, Tbody } from "../../ComponentsToDoList/Table";
 import { connect } from "react-redux";
-import { addTaskAction, changeThemeAction, deleteTaskAction, doneTaskAction, editTaskAction } from '../../../redux/actions/ToDoListActions';
+import { addTaskAction, changeThemeAction, deleteTaskAction, doneTaskAction, editTaskAction, updateTask } from '../../../redux/actions/ToDoListActions';
 import { arrTheme } from "../../../JSS_StyledComponent/Themes/ThemeManager";
 import { change_theme, edit_task } from '../../../redux/types/ToDoListTypes';
 
 class ToDoList extends Component {
 
     state = {
-        taskName:''
+        taskName:'',
+        disabled: true
     }
 
     renderTaskToDo = () => {
@@ -26,7 +27,13 @@ class ToDoList extends Component {
             <Th style={{verticalAlign:'middle'}}>{task.taskName}</Th>
             <Th className="text-right">
                 <Button onClick={()=>{
-                    this.props.dispatch(editTaskAction(task))
+
+                    this.setState({
+                        disabled:false
+                    }, () => {
+                        this.props.dispatch(editTaskAction(task))
+                    })
+
                 }} className="ml-1"><i className="fa fa-edit"></i></Button>
 
                 <Button onClick={()=>{
@@ -61,6 +68,28 @@ class ToDoList extends Component {
         })
     }
 
+    //Lifecycle bảng 16 nhận vào props mới được thực thi trước render
+    // componentWillReceiveProps(newProps) {
+    //     console.log('this.props', this.props);
+    //     console.log('newProps',newProps);
+    //     this.setState({
+    //         taskName: newProps.taskEdit.taskName
+    //     })
+    // }
+
+    //Lifecycle tĩnh không truy xuất được trỏ this
+    // static getDerivedStateFromProps(newProps,currentState){
+        //newProps: là props mới, props cũ là this.props (k truy xuất đc)
+        //currentState: ứng với state hiện tại this.state
+
+        //hoặc trả về state mới(this.state)
+        // let newState = {...currentState,taskName: newProps.taskEdit.taskName}
+        // return newState;
+
+        //trả về null state giữ nguyên
+        // return null;
+    // }
+
     render() {
         return (
             <ThemeProvider theme={this.props.themeToDoList}>
@@ -73,9 +102,11 @@ class ToDoList extends Component {
                         {this.renderTheme()}
                     </Dropdown>
                         <Heading3>To Do List</Heading3>
-                        <TextField value={this.props.taskEdit.taskName} onChange={(e)=>{
+                        <TextField value={this.state.taskName} onChange={(e)=>{
                             this.setState({
-                                taskName:e.target.value
+                                taskName: e.target.value
+                            },()=>{
+                                console.log(this.state)
                             })
                         }} name="taskName" label="Task name" className="w-50" />
 
@@ -92,7 +123,24 @@ class ToDoList extends Component {
                             //Đưa task object lên redux thông qua phương thức dispatch
                             this.props.dispatch(addTaskAction(newTask))
                         }} className="ml-2"><i className="fa fa-plus"></i >Add task </Button>
-                        <Button className="ml-2"><i className="fa fa-upload"></i >Update task </Button>
+
+                        {
+                            this.state.disabled ? <Button disabled onClick={()=>{
+                                this.props.dispatch(updateTask(this.state.taskName))
+                            }} className="ml-2"><i className="fa fa-upload"></i >Update task </Button> : 
+                            <Button onClick={()=>{
+                                let {taskName} = this.state;
+                                this.setState({
+                                    disabled:true,
+                                    taskName:''
+                                }, () => {
+                                    this.props.dispatch(updateTask(taskName))
+                                })
+
+                            }} className="ml-2"><i className="fa fa-upload"></i >Update task </Button>  
+                        }
+
+                        
                         <hr />
                         <Heading3>Task to do</Heading3>
                         <Table>
@@ -109,6 +157,20 @@ class ToDoList extends Component {
                 </Container>
             </ThemeProvider>
         )
+    }
+
+
+    //Đây là lifecycle trả về props cũ và state cũ của component trước khi render
+    //Lifecycle này chạy sau render
+    componentDidUpdate(prevProps,prevState){
+        //So sánh nếu như props trước đó (taskEdit trước mà khác taskEdit hiện tại thì mình mới setState)
+        if(prevProps.taskEdit.id !== this.props.taskEdit.id){
+            this.setState({
+                taskName:this.props.taskEdit.taskName
+            })
+        }
+
+        
     }
 }
 

@@ -5,6 +5,7 @@ import './App.css';
 // import DemoJSS from './JSS_StyledComponent/DemoJSS/DemoJSS';
 // import DemoTheme from './JSS_StyledComponent/Themes/DemoTheme';
 import ToDoList from './JSS_StyledComponent/BaiTapStyleComponent/ToDoList/ToDoList';
+import LifeCycleReact from './LifeCycleReact/LifeCycleReact';
 
 
 
@@ -16,6 +17,7 @@ function App() {
       {/* <DemoJSS /> */}
       {/* <DemoTheme /> */}
       <ToDoList />
+      {/* <LifeCycleReact /> */}
     </div>
   );
 }
