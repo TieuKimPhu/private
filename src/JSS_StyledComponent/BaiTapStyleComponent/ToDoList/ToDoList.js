@@ -61,7 +61,7 @@ class ToDoList extends Component {
                 }}
                 className="ml-1"
               >
-                <i className="fa fa-edit"></i>
+                <i class="bi bi-pencil-square"></i>
               </Button>
 
               <Button
@@ -70,7 +70,8 @@ class ToDoList extends Component {
                 }}
                 className="ml-1"
               >
-                <i className="fa fa-check"></i>
+                <i class="bi bi-check2-all"></i>
+                
               </Button>
 
               <Button
@@ -79,7 +80,8 @@ class ToDoList extends Component {
                 }}
                 className="ml-1"
               >
-                <i className="fa fa-trash"></i>
+                <i class="bi bi-trash-fill"></i>
+                
               </Button>
             </Th>
           </Tr>
@@ -101,7 +103,7 @@ class ToDoList extends Component {
                 }}
                 className="ml-1"
               >
-                <i className="fa fa-trash"></i>
+                <i class="bi bi-trash-fill"></i>
               </Button>
             </Th>
           </Tr>
@@ -185,7 +187,7 @@ class ToDoList extends Component {
             }}
             className="ml-2"
           >
-            <i className="fa fa-plus"></i>Add task{" "}
+            <i class="bi bi-plus-lg"></i>Add task{" "}
           </Button>
 
           {this.state.disabled ? (
@@ -196,7 +198,7 @@ class ToDoList extends Component {
               }}
               className="ml-2"
             >
-              <i className="fa fa-upload"></i>Update task{" "}
+              <i class="bi bi-arrow-bar-up"></i>Update task{" "}
             </Button>
           ) : (
             <Button
